@@ -1,2 +1,20 @@
 ---
 # tasks file for FlexiBeeServer
+  - name: Get Vitex Software Repo Key
+    get_url: url=http://v.s.cz/info@vitexsoftware.cz.gpg.key dest=/tmp/vitexsoftware.cz.gpg.key
+  
+  - name: Use Vitex Software Repo Key
+    command: apt-key add /tmp/vitexsoftware.cz.gpg.key
+
+  - name: Add Vitex Software Repo      
+    apt_repository:
+      repo: deb http://v.s.cz/ stable main
+      state: present     
+
+  - name: Install Common packages
+    apt:
+      name: "{{ item }}"
+      update_cache: true
+      state: present
+    with_items:
+      - 'flexibee-server'
